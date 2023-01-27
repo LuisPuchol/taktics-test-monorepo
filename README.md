@@ -10,6 +10,7 @@ The project needs a way to handle budgets made by the users.
 A budget has the following structure:
 
 * A name
+* A thumbnail, an image. This image must be uploaded to Amazon S3 and be visible from the list and the detail pages
 * A date
 * A client name
 * A total cost import (will be the sum of all chapters total cost)
@@ -37,13 +38,14 @@ A batch has the following fields:
 * A total sale import that will be the unitary sale times amount
 
 
-So a new section "Budgets" on the sidebar must be created. This section will lead to a new view that will render an upper part with 3 filters: by name, by client name and by a range of dates; and on the bottom part a list with all the budgets (will show all the fields as columns) filtered by the filters.
+So a new section "Budgets" on the sidebar must be created. This section will lead to a new view that will render an upper part with 3 filters: by name, by client name and by a range of dates; and on the bottom part a list with all the budgets (will show all the fields as columns, the thumbnail must be a column too) filtered by the filters.
 
 Every budget will have 2 actions: edit budget and delete budget.
 
 When editing the budget, will open a detail of the budget. This budget detail view has 2 sections:
 
 * An upper on that will display the budget fields as a nice form (needs to be editable, only the ones that aren't a calculus result)
+  * There must be a way to see the thumbnail and be able to delete it or upload a new one
 * A bottom one that will display a table with the chapters and batches of the budgets. The fields that aren't formulas will be editable and will upadte all the fields that are calculations (batch -> chapter -> budget). It needs to have a visual indicator that differenciates what's a chapter and what's a batch. Finally, this table will have the following actions:
 
   * Create a chapter, will add a chapter
