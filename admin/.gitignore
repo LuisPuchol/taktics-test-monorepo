@@ -14,4 +14,3 @@ app.constants.js
 
 app/assets/js/common/config/test
 build
-config/development.js
