@@ -3,29 +3,34 @@ This monorepo has 2 projects:
 
 * A front-end made in angular 1.5.8
 * A back-end made in loopback 3
+  
+  * The back-end has one user added to make login
 
 # Test Requirements
-The project needs a way to handle budgets made by the users.
+The solution will start with this project.
 
-A budget has the following structure:
+The project needs a way to handle budgets made by the users to send to the clie.
+
+A Budget has the following structure:
 
 * A name
-* A thumbnail, an image. This image must be uploaded to Amazon S3 and be visible from the list and the detail pages
+* A thumbnail, an image
 * A date
 * A client name
 * A total cost import (will be the sum of all chapters total cost)
 * A total sale import (will be the sum of all chapters total sale)
-* A list of chapters and batches
+* A list of Chapters
 
-A chapter has the following fields:
+A Chapter has the following fields:
 
 * A rank that determines the chapter position in the budget
 * A description
 * 2 sale coefficiens (material and labour). A sale coefficient its a margin gained to the cost, for example a sale coefficient of 1.5 on 300€ cost will produce a 450€ sale
 * A total cost import (will be the sum of all batches total cost)
 * A total sale import (will be the sum of all batches total sale)
+* A list of Batches
 
-A batch has the following fields:
+A Batch has the following fields:
 
 * A rank that determines the batch position inside the chapter
 * A description
