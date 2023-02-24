@@ -5,6 +5,12 @@ This monorepo has 2 projects:
 * A back-end made in loopback 3
   
   * The back-end has one user added to make login
+  * The backend uses an in-memory connector to persist data. A database is not needed to pass the test
+
+For better compatibility use Node 14.X and linux/WSL2. If you are using Windows maybe you'll have issues with node-sass. These links can help you:
+
+- https://stackoverflow.com/questions/46953808/node-sass-installation-issue-on-windows-10
+- https://github.com/nodejs/node-gyp/blob/main/docs/Updating-npm-bundled-node-gyp.md
 
 # Test Requirements
 The solution will start with this project.
@@ -63,7 +69,7 @@ When deleting the budget, will show a modal warning the user that the budget wil
 Finally the las action of the budgets table will be a create one that will open the same view as the edit budget but to create a new one.
 
 # Test Duration
-After you received the email with the instructions you will have 48 hours to deliver this test. Deliver it later and you will be discualified
+After you received the email with the instructions you will the mentioned on the email amount of time to deliver this test. Deliver it later and you will be discualified.
 
 # Delivering Instructions
 In order to deliver this test you will create a private repo on your provider of choice (Github, Gitlab, ...), include jplaza@taktics.net as a user capable of cloning the solution and reply the email sended to you with the link to access to the solution repository.
