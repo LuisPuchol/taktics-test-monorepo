@@ -15,9 +15,11 @@ For better compatibility use Node 14.X and linux/WSL2. If you are using Windows 
 # Test Requirements
 The solution will start with this project.
 
-The project needs a way to handle budgets made by the users to send to the clie.
+The project needs a way to handle budgets made by the users to send to the client.
 
 A Budget has the following structure:
+
+![Budget Structure](budget_structure.png)
 
 * A name
 * A thumbnail, an image
@@ -48,7 +50,6 @@ A Batch has the following fields:
 * An unitary sale cost that will be the sum of material and labour cost with the corresponding sale coefficients
 * A total sale import that will be the unitary sale times amount
 
-
 So a new section "Budgets" on the sidebar must be created. This section will lead to a new view that will render an upper part with 3 filters: by name, by client name and by a range of dates; and on the bottom part a list with all the budgets (will show all the fields as columns, the thumbnail must be a column too) filtered by the filters.
 
 Every budget will have 2 actions: edit budget and delete budget.
@@ -67,6 +68,15 @@ When editing the budget, will open a detail of the budget. This budget detail vi
 When deleting the budget, will show a modal warning the user that the budget will be deleted. If the user selects "Accept", the budget will be deleted. If the user selects "Cancel", the modal will be closed.
 
 Finally the las action of the budgets table will be a create one that will open the same view as the edit budget but to create a new one.
+
+# Mockups
+Budget list
+
+![Budget list](budget_list.png)
+
+Budget detail screen
+
+![Budget detail](./budget_detail.png)
 
 # Test Duration
 After you received the email with the instructions you will the mentioned on the email amount of time to deliver this test. Deliver it later and you will be discualified.
