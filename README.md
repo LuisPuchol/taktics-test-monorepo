@@ -13,7 +13,7 @@ For better compatibility use Node 14.X and Linux or if in Windows use WSL2. If y
 - https://github.com/nodejs/node-gyp/blob/main/docs/Updating-npm-bundled-node-gyp.md
 
 # Test Requirements
-The solution will start with this project.
+The solution will start with this project and must be done with the frameworks used, angular js and loopback.
 
 The project needs a way to handle budgets made by the users to send to the client.
 
