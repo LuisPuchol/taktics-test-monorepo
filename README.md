@@ -4,7 +4,7 @@ This monorepo has 2 projects:
 * A front-end made in angular 1.5.8. Docs [link](https://docs.angularjs.org/guide)
 * A back-end made in loopback 3. Docs [link](https://loopback.io/doc/en/lb3/)
   
-  * The back-end has one user added to make login
+  * The back-end has one user added to make login, jplaza@taktics.net / 1212
   * The backend uses an in-memory connector to persist data. A database is not needed to pass the test
 
 For better compatibility use Node 14.X and Linux or if in Windows use WSL2. If you are using Windows you could have issues with node-sass. I wouldn't recommend developing in Windows but if you want to do it, these links can help you in case of trouble starting the project:
