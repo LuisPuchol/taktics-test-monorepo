@@ -30,19 +30,21 @@
     </div>
   </div>
   <ul class="menu-links" ng-cloak>
-    <ul
-      menu-toggle
-      ng-click="$event.preventDefault()"
-      name="Budgets"
+    <a
+      menu-link
+      ng-click="$event.stopPropagation()"
+      ui-sref="home"
+      name="Home"
     >
-      <a
-        menu-link
-        ng-click="$event.stopPropagation()"
-        ui-sref="budgets"
-        name="All Budgets"
-      >
-        All Budgets
-      </a>
-    </ul>
+      Home
+    </a>
+    <a
+      menu-link
+      ng-click="$event.stopPropagation()"
+      ui-sref="users"
+      name="Users"
+    >
+      Users
+    </a>
   </ul>
 </aside>
