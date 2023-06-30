@@ -12,6 +12,9 @@ For better compatibility use Node 14.X and Linux or if in Windows use WSL2. If y
 - https://stackoverflow.com/questions/46953808/node-sass-installation-issue-on-windows-10
 - https://github.com/nodejs/node-gyp/blob/main/docs/Updating-npm-bundled-node-gyp.md
 
+# Project structure
+The following [video](https://www.loom.com/share/9759af64893f410197a8805d9fe8bf79) makes a brief explanation about how the project is structured and the key elements.
+
 # Test Requirements
 The solution will start with this project and must be done with the frameworks used, angular js and loopback.
 
