@@ -47,6 +47,7 @@ import directives from './app/assets/js/common/directives/app.directives';
 import sessions from './app/assets/js/modules/sessions/app.sessions';
 import MainController from './app/assets/js/common/controllers/main.controller';
 import dashboard from './app/assets/js/modules/dashboard/app.dashboard';
+import users from './app/assets/js/modules/users/app.users';
 import 'gm.datepicker-multi-select';
 
 
@@ -80,6 +81,7 @@ angular
     directives,
     sessions,
     dashboard,
+    users,
     'ui.sortable',
     'gm.datepickerMultiSelect',
   ])
