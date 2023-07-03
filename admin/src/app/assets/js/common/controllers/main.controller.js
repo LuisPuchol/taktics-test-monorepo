@@ -5,10 +5,7 @@ export default function MainController(
   LoopBackAuth,
   $cookies,
   $interval,
-  $translate,
   Personnel,
-  customLocales,
-  $locale
 ) {
   $rootScope.currentUser = null;
   $rootScope.userRoles = USER_ROLES;
@@ -78,9 +75,6 @@ export default function MainController(
     }
   }
 
-  moment.locale('es');
-  angular.copy(customLocales['es'], $locale);
-
   active();
 }
 
@@ -91,8 +85,5 @@ MainController.$inject = [
   'LoopBackAuth',
   '$cookies',
   '$interval',
-  '$translate',
   'Personnel',
-  'customLocales',
-  '$locale',
 ];

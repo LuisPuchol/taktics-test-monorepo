@@ -56,7 +56,7 @@ function StateChange($rootScope, $state, AdminType, $window) {
     } else if (localStorage.user) {
       if (whiteStates.indexOf(nextState.name) > -1) {
         event.preventDefault();
-        $state.go('dashboard');
+        $state.go('home');
       }
 
       if (window.onscroll) window.onscroll = null;

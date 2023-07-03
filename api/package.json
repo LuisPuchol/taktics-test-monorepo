@@ -21,11 +21,8 @@
     "loopback-component-explorer": "^2.4.0",
     "loopback-component-passport": "^2.3.0",
     "loopback-component-storage": "^1.9.2",
-    "loopback-connector-mysql": "github:jolivervidal/loopback-connector-mysql#v5.2.0.4-beta",
     "loopback-connector-rest": "^2.1.0",
     "loopback-context": "^1.0.0",
-    "loopback-ds-timestamp-mixin": "^3.4.1",
-    "loopback-softdelete-mixin-apploading": "0.0.15",
     "multiparty": "^4.2.3",
     "strong-error-handler": "^1.0.1"
   },

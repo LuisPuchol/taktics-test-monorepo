@@ -15,7 +15,7 @@ export default function LoginController($rootScope, $state, $translate, Personne
             personnel.workCenter.urlAvatar = 'assets/img/logo-white.png';
           localStorage.setItem('user', JSON.stringify(personnel));
           $rootScope.setCurrentUser(personnel);
-          $state.go('dashboard');
+          $state.go('home');
         });
       }
     );

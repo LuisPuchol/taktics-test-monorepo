@@ -1,17 +1,11 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const { merge } = require('lodash');
 
 const path = require('path');
 const environment = process.env.NODE_ENV;
-const environmentConfiguration = merge(
-  {
-    NODE_ENV: JSON.stringify(environment),
-  },
-  require('./config/default.js'),
-  require('./config/' + environment + '.js')
-);
+const environmentConfiguration = require('./config/default.js')
+environmentConfiguration.NODE_ENV = JSON.stringify(environment)
 environmentConfiguration.constants.templatePrefix = JSON.stringify(
   path.join(__dirname, '/src/app/')
 );
@@ -31,19 +25,6 @@ const webpackConfig = {
   },
   module: {
     rules: [
-      {
-        test: require.resolve('jquery'),
-        use: [
-          {
-            loader: 'expose-loader',
-            options: 'jQuery',
-          },
-          {
-            loader: 'expose-loader',
-            options: '$',
-          },
-        ],
-      },
       {
         test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|ico)$/,
         loader: 'file-loader',
@@ -101,9 +82,6 @@ const webpackConfig = {
   ],
   resolve: {
     extensions: ['.js', '.jsx'],
-    alias: {
-      jquery: 'jquery/src/jquery',
-    },
   },
 };
 

@@ -26,7 +26,7 @@ export default function LoginController(
     Personnel.v2details({ id: personnel.userId }).$promise.then(function (personnel) {
       localStorage.setItem('user', JSON.stringify(personnel));
       $rootScope.setCurrentUser(personnel);
-      $state.go('dashboard');
+      $state.go('home');
     });
   }
 }
