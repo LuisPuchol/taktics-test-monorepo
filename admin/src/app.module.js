@@ -21,6 +21,7 @@ import sessions from './app/assets/js/modules/sessions/app.sessions';
 import MainController from './app/assets/js/common/controllers/main.controller';
 import dashboard from './app/assets/js/modules/dashboard/app.dashboard';
 import users from './app/assets/js/modules/users/app.users';
+import budget from './app/assets/js/modules/budget/app.budget';
 
 
 angular
@@ -43,5 +44,6 @@ angular
     sessions,
     dashboard,
     users,
+    budget,
   ])
   .controller('MainController', MainController);

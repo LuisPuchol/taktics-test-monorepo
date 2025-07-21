@@ -1,0 +1,47 @@
+{
+  "name": "Chapter",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {
+    "rank": {
+      "type": "number",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "required": true
+    },
+    "materialSaleCoefficient": {
+      "type": "number",
+      "default": 1
+    },
+    "labourSaleCoefficient": {
+      "type": "number", 
+      "default": 1
+    },
+    "totalCost": {
+      "type": "number",
+      "default": 0
+    },
+    "totalSale": {
+      "type": "number",
+      "default": 0
+    },
+    "budgetId": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "relations": {
+    "budget": {
+      "type": "belongsTo",
+      "model": "Budget",
+      "foreignKey": "budgetId"
+    },
+    "batches": {
+      "type": "hasMany", 
+      "model": "Batch",
+      "foreignKey": "chapterId"
+    }
+  }
+}

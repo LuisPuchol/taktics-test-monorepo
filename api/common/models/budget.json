@@ -1,0 +1,43 @@
+{
+  "name": "Budget",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "thumbnail": {
+      "type": "string"
+    },
+    "date": {
+      "type": "date",
+      "required": true
+    },
+    "clientName": {
+      "type": "string",
+      "required": true
+    },
+    "totalCost": {
+      "type": "number",
+      "default": 0
+    },
+    "totalSale": {
+      "type": "number", 
+      "default": 0
+    }
+  },
+  "validations": [],
+  "relations": {
+    "chapters": {
+      "type": "hasMany",
+      "model": "Chapter",
+      "foreignKey": "budgetId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
