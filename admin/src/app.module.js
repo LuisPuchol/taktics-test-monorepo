@@ -13,6 +13,7 @@ import 'angular-local-storage';
 import 'angular-translate';
 import 'angular-translate-loader-url';
 import 'angular-resource';
+import 'angular-ui-bootstrap/dist/ui-bootstrap-tpls.js';
 import './app/assets/js/common/services/lb-services';
 import './app/assets/js/common/config/app.config';
 import './app/assets/js/common/config/app.statics';
@@ -28,6 +29,7 @@ angular
   .module('app', [
     'ngCookies',
     'ui.router',
+    'ui.bootstrap',
     'ngAnimate',
     'ngSanitize',
     'nemLogging',
@@ -45,5 +47,6 @@ angular
     dashboard,
     users,
     budget,
+    'ui.bootstrap'
   ])
   .controller('MainController', MainController);

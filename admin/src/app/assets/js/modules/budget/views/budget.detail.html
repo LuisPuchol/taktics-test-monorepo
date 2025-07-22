@@ -1,0 +1,318 @@
+<style>
+  .chapter-row {
+    background-color: #f8f9fa !important;
+    border-left: 4px solid #007bff;
+  }
+
+  .batch-row {
+    background-color: #ffffff;
+    border-left: 4px solid #28a745;
+  }
+
+  .input-sm {
+    padding: 2px 6px;
+    font-size: 12px;
+    height: 28px;
+  }
+
+  .thumbnail-container button {
+    margin: 2px;
+  }
+</style>
+<section class="forms-basic">
+  <div class="page-header">
+    <h1>{{vm.isCreating ? 'Create Budget' : 'Edit Budget'}}</h1>
+    <div class="page-header-actions">
+      <a ui-sref="budget" class="btn btn-secondary">Back to List</a>
+      <button class="btn btn-primary" ng-click="vm.saveBudget()">Save</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Budget Details</h3>
+    </div>
+    <div class="card-content">
+      <div class="row">
+        <div class="col-md-3">
+          <label>Thumbnail</label>
+          <div
+            class="thumbnail-container"
+            style="
+              border: 1px dashed #ccc;
+              padding: 20px;
+              text-align: center;
+              min-height: 150px;
+            "
+          >
+            <img
+              ng-if="vm.budget.thumbnail"
+              ng-src="{{vm.budget.thumbnail}}"
+              alt="Thumbnail"
+              style="max-width: 100%; max-height: 120px"
+            />
+            <div ng-if="!vm.budget.thumbnail" style="color: #999">
+              <i class="fa fa-image" style="font-size: 48px"></i>
+              <p>No image</p>
+            </div>
+            <div style="margin-top: 10px">
+              <input
+                type="file"
+                id="thumbnailInput"
+                accept="image/*"
+                style="display: none"
+                ng-file-select="vm.onThumbnailSelect($file)"
+              />
+              <button
+                class="btn btn-sm btn-secondary"
+                onclick="document.getElementById('thumbnailInput').click()"
+              >
+                Upload
+              </button>
+              <button
+                class="btn btn-sm btn-danger"
+                ng-if="vm.budget.thumbnail"
+                ng-click="vm.removeThumbnail()"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-9">
+          <div class="row">
+            <div class="col-md-6">
+              <label>Name *</label>
+              <input
+                type="text"
+                class="form-control"
+                ng-model="vm.budget.name"
+                required
+              />
+            </div>
+            <div class="col-md-6">
+              <label>Client Name *</label>
+              <input
+                type="text"
+                class="form-control"
+                ng-model="vm.budget.clientName"
+                required
+              />
+            </div>
+          </div>
+          <div class="row" style="margin-top: 15px">
+            <div class="col-md-4">
+              <label>Date *</label>
+              <input
+                type="date"
+                class="form-control"
+                ng-model="vm.budget.date"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label>Total Cost (Calculated)</label>
+              <input
+                type="text"
+                class="form-control"
+                ng-model="vm.budget.totalCost"
+                readonly
+                style="background-color: #f5f5f5"
+              />
+            </div>
+            <div class="col-md-4">
+              <label>Total Sale (Calculated)</label>
+              <input
+                type="text"
+                class="form-control"
+                ng-model="vm.budget.totalSale"
+                readonly
+                style="background-color: #f5f5f5"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Chapters & Batches</h3>
+      <div class="card-header-actions">
+        <button class="btn btn-primary" ng-click="vm.addChapter()">
+          Add Chapter
+        </button>
+      </div>
+    </div>
+    <div class="card-content">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th style="width: 60px">Rank</th>
+              <th>Description</th>
+              <th style="width: 80px">Material Coef.</th>
+              <th style="width: 80px">Labour Coef.</th>
+              <th style="width: 80px">Quantity</th>
+              <th style="width: 90px">Labour Cost</th>
+              <th style="width: 90px">Material Cost</th>
+              <th style="width: 90px">Unit Cost</th>
+              <th style="width: 90px">Unit Sale</th>
+              <th style="width: 90px">Total Cost</th>
+              <th style="width: 90px">Total Sale</th>
+              <th style="width: 120px">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              ng-repeat="item in vm.displayItems track by $index"
+              ng-class="{'chapter-row': item.type === 'chapter', 'batch-row': item.type === 'batch'}"
+            >
+              <td>
+                <input
+                  type="number"
+                  class="form-control input-sm"
+                  ng-model="item.rank"
+                  ng-change="vm.updateCalculations()"
+                />
+              </td>
+
+              <td>
+                <div
+                  ng-if="item.type === 'chapter'"
+                  style="
+                    font-weight: bold;
+                    background-color: #f8f9fa;
+                    padding: 5px;
+                  "
+                >
+                  📁
+                  <input
+                    type="text"
+                    class="form-control input-sm"
+                    ng-model="item.description"
+                    style="display: inline-block; width: 80%"
+                  />
+                </div>
+                <div ng-if="item.type === 'batch'" style="margin-left: 20px">
+                  📄
+                  <input
+                    type="text"
+                    class="form-control input-sm"
+                    ng-model="item.description"
+                    style="display: inline-block; width: 80%"
+                  />
+                </div>
+              </td>
+
+              <td>
+                <input
+                  ng-if="item.type === 'chapter'"
+                  type="number"
+                  step="0.1"
+                  class="form-control input-sm"
+                  ng-model="item.materialSaleCoefficient"
+                  ng-change="vm.updateCalculations()"
+                />
+                <span ng-if="item.type === 'batch'">-</span>
+              </td>
+
+              <td>
+                <input
+                  ng-if="item.type === 'chapter'"
+                  type="number"
+                  step="0.1"
+                  class="form-control input-sm"
+                  ng-model="item.labourSaleCoefficient"
+                  ng-change="vm.updateCalculations()"
+                />
+                <span ng-if="item.type === 'batch'">-</span>
+              </td>
+
+              <td>
+                <input
+                  ng-if="item.type === 'batch'"
+                  type="number"
+                  class="form-control input-sm"
+                  ng-model="item.amount"
+                  ng-change="vm.updateCalculations()"
+                />
+                <span ng-if="item.type === 'chapter'">-</span>
+              </td>
+
+              <td>
+                <input
+                  ng-if="item.type === 'batch'"
+                  type="number"
+                  step="0.01"
+                  class="form-control input-sm"
+                  ng-model="item.labourCost"
+                  ng-change="vm.updateCalculations()"
+                />
+                <span ng-if="item.type === 'chapter'">-</span>
+              </td>
+
+              <td>
+                <input
+                  ng-if="item.type === 'batch'"
+                  type="number"
+                  step="0.01"
+                  class="form-control input-sm"
+                  ng-model="item.materialCost"
+                  ng-change="vm.updateCalculations()"
+                />
+                <span ng-if="item.type === 'chapter'">-</span>
+              </td>
+
+              <td>
+                <span ng-if="item.type === 'batch'"
+                  >{{item.unitaryCost | currency:'€':2}}</span
+                >
+                <span ng-if="item.type === 'chapter'">-</span>
+              </td>
+
+              <td>
+                <span ng-if="item.type === 'batch'"
+                  >{{item.unitarySale | currency:'€':2}}</span
+                >
+                <span ng-if="item.type === 'chapter'">-</span>
+              </td>
+
+              <td>
+                <strong>{{item.totalCost | currency:'€':2}}</strong>
+              </td>
+
+              <td>
+                <strong>{{item.totalSale | currency:'€':2}}</strong>
+              </td>
+
+              <td>
+                <button
+                  ng-if="item.type === 'chapter'"
+                  class="btn btn-xs btn-success"
+                  ng-click="vm.addBatch(item)"
+                >
+                  Add Batch
+                </button>
+                <button
+                  class="btn btn-xs btn-danger"
+                  ng-click="vm.deleteItem(item)"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+
+            <tr ng-if="vm.displayItems.length === 0">
+              <td colspan="12" class="text-center">
+                No chapters created yet. Click "Add Chapter" to start.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>

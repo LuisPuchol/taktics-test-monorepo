@@ -1,56 +1,97 @@
+<style>
+  .budget-filters-container .filter-row.input-row {
+    margin-bottom: 20px;
+  }
+
+  .budget-filters-container .filter-row.input-row .btn {
+    margin-right: 20px;
+  }
+  .date-input {
+    padding-right: 5px !important;
+  }
+</style>
+
 <section class="forms-basic">
   <div class="page-header">
     <h1>Budget List</h1>
-    <div class="page-header-actions">
-      <a href="#/budgets/create" class="btn btn-primary">Create</a>
-    </div>
   </div>
 
-  <div class="card">
-    <div class="card-content">
-      <div class="row">
-        <div class="col-md-3">
-          <label>Client</label>
-          <input
-            type="text"
-            class="form-control"
-            ng-model="vm.filters.client"
-            placeholder="Client name"
-          />
+  <div class="budget-filters-container">
+    <div class="card">
+      <div class="card-content">
+        <div class="row filter-row label-row">
+          <div class="col-md-4">
+            <label>Name</label>
+          </div>
+          <div class="col-md-4">
+            <label>From</label>
+          </div>
+          <div class="col-md-4"></div>
         </div>
-        <div class="col-md-3">
-          <label>Name</label>
-          <input
-            type="text"
-            class="form-control"
-            ng-model="vm.filters.name"
-            placeholder="Budget name"
-          />
+
+        <div class="row filter-row input-row">
+          <div class="col-md-4">
+            <input
+              type="text"
+              class="form-control"
+              ng-model="vm.filters.name"
+              placeholder="Budget name"
+            />
+          </div>
+          <div class="col-md-4">
+            <input
+              type="date"
+              class="form-control date-input"
+              ng-model="vm.filters.dateFrom"
+            />
+          </div>
+          <div class="col-md-4 d-flex gap-3">
+            <button
+              class="btn btn-secondary flex-grow-1"
+              ng-click="vm.applyFilters()"
+            >
+              <i class="fa fa-search"></i> Search
+            </button>
+            <button
+              class="btn btn-outline-secondary flex-grow-1"
+              ng-click="vm.resetFilters()"
+            >
+              <i class="fa fa-refresh"></i> Clear
+            </button>
+          </div>
         </div>
-        <div class="col-md-2">
-          <label>From</label>
-          <input
-            type="date"
-            class="form-control"
-            ng-model="vm.filters.dateFrom"
-          />
+
+        <div class="row filter-row label-row">
+          <div class="col-md-4">
+            <label>Client</label>
+          </div>
+          <div class="col-md-4">
+            <label>To</label>
+          </div>
+          <div class="col-md-4"></div>
         </div>
-        <div class="col-md-2">
-          <label>To</label>
-          <input
-            type="date"
-            class="form-control"
-            ng-model="vm.filters.dateTo"
-          />
-        </div>
-        <div class="col-md-2">
-          <button
-            class="btn btn-secondary"
-            ng-click="vm.applyFilters()"
-            style="margin-top: 25px"
-          >
-            Filter
-          </button>
+
+        <div class="row filter-row input-row">
+          <div class="col-md-4">
+            <input
+              type="text"
+              class="form-control"
+              ng-model="vm.filters.client"
+              placeholder="Client name"
+            />
+          </div>
+          <div class="col-md-4">
+            <input
+              type="date"
+              class="form-control date-input"
+              ng-model="vm.filters.dateTo"
+            />
+          </div>
+          <div class="col-md-4">
+            <button class="btn btn-primary w-100" ui-sref="budget-create">
+              <i class="fa fa-plus"></i> Create Budget
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -87,12 +128,15 @@
             <td>{{budget.totalCost | currency:'€':2}}</td>
             <td>{{budget.totalSale | currency:'€':2}}</td>
             <td>
-              <a href="#/budgets/{{budget.id}}" class="btn btn-sm btn-primary"
+              <a
+                ui-sref="budget-detail({ id: budget.id })"
+                class="btn btn-sm btn-primary"
                 >Edit</a
               >
+
               <button
                 class="btn btn-sm btn-danger"
-                ng-click="vm.deleteBudget(budget)"
+                ng-click="vm.showDeleteModal(budget)"
               >
                 Delete
               </button>
