@@ -150,8 +150,8 @@
             </td>
             <td>{{budget.date | date:'dd/MM/yyyy'}}</td>
             <td class="client-name-cell">{{budget.clientName}}</td>
-            <td>{{budget.totalCost | currency:'€':2}}</td>
-            <td>{{budget.totalSale | currency:'€':2}}</td>
+            <td>{{budget.totalCost | number:2}} €</td>
+            <td>{{budget.totalSale | number:2}} €</td>
             <td>
               <a
                 ui-sref="budget-detail({ id: budget.id })"

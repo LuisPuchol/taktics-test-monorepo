@@ -360,24 +360,24 @@
 
               <td>
                 <span ng-if="item.type === 'batch'"
-                  >{{item.unitaryCost | currency:'€':2}}</span
+                  >{{item.unitaryCost | number:2}} €</span
                 >
                 <span ng-if="item.type === 'chapter'">-</span>
               </td>
 
               <td>
                 <span ng-if="item.type === 'batch'"
-                  >{{item.unitarySale | currency:'€':2}}</span
+                  >{{item.unitarySale | number:2}} €</span
                 >
                 <span ng-if="item.type === 'chapter'">-</span>
               </td>
 
               <td>
-                <strong>{{item.totalCost | currency:'€':2}}</strong>
+                <strong>{{item.totalCost | number:2}} €</strong>
               </td>
 
               <td>
-                <strong>{{item.totalSale | currency:'€':2}}</strong>
+                <strong>{{item.totalSale | number:2}} €</strong>
               </td>
 
               <!-- Action buttons -->
