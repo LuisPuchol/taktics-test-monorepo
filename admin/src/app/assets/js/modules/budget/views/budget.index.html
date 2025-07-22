@@ -1,4 +1,5 @@
 <style>
+  /* Styles for filter layout and spacing */
   .budget-filters-container .filter-row.input-row {
     margin-bottom: 20px;
   }
@@ -6,19 +7,41 @@
   .budget-filters-container .filter-row.input-row .btn {
     margin-right: 20px;
   }
+
   .date-input {
     padding-right: 5px !important;
   }
+
+  /* Thumbnail image display */
+  .thumbnail-image {
+    max-height: 100%;
+    max-width: 60px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+
+  /* Prevent overflow in table cells */
+  .budget-name-cell,
+  .client-name-cell {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 150px;
+  }
 </style>
 
-<section class="forms-basic">
+<section>
+  <!-- Page header -->
   <div class="page-header">
     <h1>Budget List</h1>
   </div>
 
+  <!-- Filters card -->
   <div class="budget-filters-container">
     <div class="card">
       <div class="card-content">
+        <!-- First row (name, from date) -->
         <div class="row filter-row label-row">
           <div class="col-md-4">
             <label>Name</label>
@@ -29,6 +52,7 @@
           <div class="col-md-4"></div>
         </div>
 
+        <!-- Second row (input, buttons) -->
         <div class="row filter-row input-row">
           <div class="col-md-4">
             <input
@@ -46,14 +70,11 @@
             />
           </div>
           <div class="col-md-4 d-flex gap-3">
-            <button
-              class="btn btn-secondary flex-grow-1"
-              ng-click="vm.applyFilters()"
-            >
+            <button class="btn btn-secondary" ng-click="vm.applyFilters()">
               <i class="fa fa-search"></i> Search
             </button>
             <button
-              class="btn btn-outline-secondary flex-grow-1"
+              class="btn btn-outline-secondary"
               ng-click="vm.resetFilters()"
             >
               <i class="fa fa-refresh"></i> Clear
@@ -61,6 +82,7 @@
           </div>
         </div>
 
+        <!-- Third row (client, to date) -->
         <div class="row filter-row label-row">
           <div class="col-md-4">
             <label>Client</label>
@@ -71,6 +93,7 @@
           <div class="col-md-4"></div>
         </div>
 
+        <!-- Fourth row (input, button) -->
         <div class="row filter-row input-row">
           <div class="col-md-4">
             <input
@@ -97,6 +120,7 @@
     </div>
   </div>
 
+  <!-- Budgets table -->
   <div class="card">
     <div class="card-content">
       <table class="table table-striped">
@@ -112,19 +136,20 @@
           </tr>
         </thead>
         <tbody>
+          <!-- List of budgets -->
           <tr ng-repeat="budget in vm.budgets" ng-show="vm.budgets.length > 0">
-            <td>{{budget.name}}</td>
+            <td class="budget-name-cell">{{budget.name}}</td>
             <td>
               <img
                 ng-if="budget.thumbnail"
                 ng-src="{{budget.thumbnail}}"
                 alt="Thumbnail"
-                style="width: 50px; height: 50px; object-fit: cover"
+                class="thumbnail-image"
               />
               <span ng-if="!budget.thumbnail" class="text-muted">No image</span>
             </td>
             <td>{{budget.date | date:'dd/MM/yyyy'}}</td>
-            <td>{{budget.clientName}}</td>
+            <td class="client-name-cell">{{budget.clientName}}</td>
             <td>{{budget.totalCost | currency:'€':2}}</td>
             <td>{{budget.totalSale | currency:'€':2}}</td>
             <td>
@@ -142,6 +167,8 @@
               </button>
             </td>
           </tr>
+
+          <!-- Empty state -->
           <tr ng-show="vm.budgets.length === 0">
             <td colspan="7" class="text-center">No budgets found</td>
           </tr>

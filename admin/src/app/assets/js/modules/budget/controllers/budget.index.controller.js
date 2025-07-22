@@ -1,6 +1,7 @@
 export default function BudgetController($rootScope, $translate, $uibModal, Budget) {
   const vm = this;
 
+  // Initialize properties
   vm.budgets = [];
   vm.filters = {
     client: '',
@@ -9,6 +10,7 @@ export default function BudgetController($rootScope, $translate, $uibModal, Budg
     dateTo: null
   };
 
+  // Methods
   vm.loadBudgets = loadBudgets;
   vm.applyFilters = applyFilters;
   vm.resetFilters = resetFilters;
@@ -17,10 +19,12 @@ export default function BudgetController($rootScope, $translate, $uibModal, Budg
 
   activate();
 
+  // Initialize controller
   function activate() {
     loadBudgets();
   }
 
+  // Load budgets from backend with current filters applied
   function loadBudgets() {
     const filter = buildFilter();
     
@@ -33,18 +37,21 @@ export default function BudgetController($rootScope, $translate, $uibModal, Budg
       });
   }
 
-  // TODO: hacerlo case-insensitive
+  // Build LoopBack filter object from form filters (option: 'i' didnt work)
   function buildFilter() {
     const where = {};
 
+    // Apply client name filter
     if (vm.filters.client) {
-      where.clientName = { like: vm.filters.client, options: 'i' };
+      where.clientName = { regexp: `/${vm.filters.client}/i` };
     }
 
+    // Apply budget name filter
     if (vm.filters.name) {
-      where.name = { like: vm.filters.name, options: 'i' };
+      where.name = { regexp: `/${vm.filters.name}/i` };
     }
 
+    // Add date range filter
     if (vm.filters.dateFrom || vm.filters.dateTo) {
       where.date = {};
       if (vm.filters.dateFrom) {
@@ -63,10 +70,12 @@ export default function BudgetController($rootScope, $translate, $uibModal, Budg
     return filter;
   }
 
+  // Apply current filters and reload budgets
   function applyFilters() {
     loadBudgets();
   }
 
+  // Clear all filters and reload budgets
   function resetFilters() {
     vm.filters = {
       client: '',
@@ -77,14 +86,12 @@ export default function BudgetController($rootScope, $translate, $uibModal, Budg
     loadBudgets();
   }
 
+  // Show confirmation modal before deleting budget
   function showDeleteModal(budget) {
     const modalInstance = $uibModal.open({
       template: `
         <div class="modal-header">
           <h4 class="modal-title" id="modal-title">Confirm Delete</h4>
-          <button type="button" class="btn-close" aria-label="Close" ng-click="$ctrl.cancel()">
-            <span aria-hidden="true">&times;</span>
-          </button>
         </div>
         <div class="modal-body" id="modal-body">
           <p>Are you sure you want to delete the budget <strong>"${budget.name}"</strong>?</p>
@@ -112,6 +119,7 @@ export default function BudgetController($rootScope, $translate, $uibModal, Budg
       }
     });
 
+    // Handle modal result
     modalInstance.result.then(function(result) {
       if (result === 'delete') {
         deleteBudget(budget);
@@ -121,57 +129,35 @@ export default function BudgetController($rootScope, $translate, $uibModal, Budg
     });
   }
 
+  // Delete budget from backend and update local list
   function deleteBudget(budget) {
     Budget.deleteById({ id: budget.id }).$promise
       .then(function() {
+        // Remove from local array
         const index = vm.budgets.indexOf(budget);
         vm.budgets.splice(index, 1);
     
-        console.log('Budget deleted successfully');
+        alert('Budget deleted successfully');
       })
       .catch(function(error) {
         console.error('Error deleting budget:', error);
-        
-        showErrorModal('Error deleting budget. Please try again.');
+        alert('Error deleting budget. Please try again.');
       });
-  }
-
-  function showErrorModal(message) {
-    $uibModal.open({
-      template: `
-        <div class="modal-header">
-          <h4 class="modal-title">Error</h4>
-        </div>
-        <div class="modal-body">
-          <div class="alert alert-danger" role="alert">
-            <i class="fa fa-exclamation-triangle"></i> ${message}
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
-        </div>
-      `,
-      controller: function($uibModalInstance) {
-        const $ctrl = this;
-        $ctrl.ok = function() {
-          $uibModalInstance.close();
-        };
-      },
-      controllerAs: '$ctrl',
-      size: 'sm'
-    });
   }
 }
 
+// Controller for delete confirmation modal
 function DeleteBudgetModalController($uibModalInstance, budget) {
   const $ctrl = this;
   
   $ctrl.budget = budget;
   
+  // Confirm deletion
   $ctrl.ok = function() {
     $uibModalInstance.close('delete');
   };
   
+  // Cancel deletion
   $ctrl.cancel = function() {
     $uibModalInstance.dismiss('cancel');
   };

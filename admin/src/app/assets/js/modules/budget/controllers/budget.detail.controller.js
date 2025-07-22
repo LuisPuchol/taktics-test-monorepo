@@ -3,12 +3,16 @@ import angular from "angular";
 export default function BudgetDetailController($rootScope, $translate, $state, $stateParams, Budget, Chapter, Batch) {
   const vm = this;
 
+  // Initialize properties
   vm.budget = {};
   vm.chapters = [];
   vm.batches = [];
   vm.displayItems = [];
+  vm.imageLoaded = false;
+  vm.imageError = false;
   vm.isCreating = $state.current.name === 'budget-create';
 
+  // Methods
   vm.loadBudget = loadBudget;
   vm.saveBudget = saveBudget;
   vm.addChapter = addChapter;
@@ -17,10 +21,10 @@ export default function BudgetDetailController($rootScope, $translate, $state, $
   vm.updateCalculations = updateCalculations;
   vm.buildDisplayItems = buildDisplayItems;
   vm.removeThumbnail = removeThumbnail;
-  vm.onThumbnailSelect = onThumbnailSelect;
 
   activate();
 
+  // Initialize controller
   function activate() {
     if (vm.isCreating) {
       initializeNewBudget();
@@ -29,6 +33,7 @@ export default function BudgetDetailController($rootScope, $translate, $state, $
     }
   }
 
+  // Initialize an empty budget
   function initializeNewBudget() {
     vm.budget = {
       name: '',
@@ -43,6 +48,7 @@ export default function BudgetDetailController($rootScope, $translate, $state, $
     buildDisplayItems();
   }
 
+  // Load existing budget
   function loadBudget() {
     const budgetId = $stateParams.id;
     
@@ -54,6 +60,7 @@ export default function BudgetDetailController($rootScope, $translate, $state, $
         vm.budget = budget;
         vm.chapters = budget.chapters || [];
         
+        // Flatten batches from chapters
         vm.batches = [];
         vm.chapters.forEach(function(chapter) {
           if (chapter.batches) {
@@ -65,11 +72,13 @@ export default function BudgetDetailController($rootScope, $translate, $state, $
         updateCalculations();
       })
       .catch(function(error) {
-        alert('Error loading budget');
+        alert('Error loading budget' + (error.data?.error?.message ? ': ' + error.data.error.message : ''));
       });
   }
 
+  // Save budget and its chapters/batches
   function saveBudget() {
+    // Validate required fields
     if (!vm.budget.name || !vm.budget.clientName || !vm.budget.date) {
       alert('Please fill in all required fields: Name, Client Name, and Date');
       return;
@@ -79,6 +88,7 @@ export default function BudgetDetailController($rootScope, $translate, $state, $
 
     let savePromise;
     
+    // Creating a new budget or update existing one
     if (vm.isCreating) {
       savePromise = Budget.create(vm.budget).$promise;
     } else {
@@ -96,6 +106,7 @@ export default function BudgetDetailController($rootScope, $translate, $state, $
         $state.go('budget');
       })
       .catch(function(error) {
+        // Enhanced error handling
         let errorMessage = 'Error saving budget. ';
         if (error.data?.error?.message) {
           errorMessage += 'Details: ' + error.data.error.message;
@@ -111,10 +122,13 @@ export default function BudgetDetailController($rootScope, $translate, $state, $
       });
   }
 
+  // Save chapters and batches
   function saveChaptersAndBatches() {
+    // Save chapters first
     const chapterPromises = vm.chapters.map(function(chapter) {
       chapter.budgetId = vm.budget.id;
       
+      // update existing chapters or create new ones
       if (chapter.id && !chapter.isTemp) {
         const updateData = angular.copy(chapter);
         delete updateData.type;
@@ -128,6 +142,7 @@ export default function BudgetDetailController($rootScope, $translate, $state, $
         
         return Chapter.create(chapterData).$promise
           .then(function(savedChapter) {
+            // Update temporary ID references in batches
             const oldId = chapter.id;
             chapter.id = savedChapter.id;
             chapter.isTemp = false;
@@ -143,8 +158,10 @@ export default function BudgetDetailController($rootScope, $translate, $state, $
       }
     });
 
+    // Save batches after chapters
     return Promise.all(chapterPromises).then(function() {
       const batchPromises = vm.batches.map(function(batch) {
+        // Save existing batches or create new ones
         if (batch.id && !batch.isTemp) {
           const updateData = angular.copy(batch);
           delete updateData.type;
@@ -168,6 +185,7 @@ export default function BudgetDetailController($rootScope, $translate, $state, $
     });
   }
 
+  // Add new chapter to budget
   function addChapter() {
     const tempId = generateTemporaryIds('chapter');
     
@@ -189,6 +207,7 @@ export default function BudgetDetailController($rootScope, $translate, $state, $
     buildDisplayItems();
   }
 
+  // Add new batch to a chapter
   function addBatch(chapter) {
     const tempId = generateTemporaryIds('batch');
     
@@ -213,10 +232,12 @@ export default function BudgetDetailController($rootScope, $translate, $state, $
     updateCalculations();
   }
 
+  // Delete a chapter or batch
   function deleteItem(item) {
     const itemType = item.type === 'chapter' ? 'chapter' : 'batch';
     let message = 'Are you sure you want to delete this ' + itemType + '?';
     
+    // Warn about associated items
     if (item.type === 'chapter') {
       const batchCount = getBatchesForChapter(item).length;
       if (batchCount > 0) {
@@ -227,6 +248,7 @@ export default function BudgetDetailController($rootScope, $translate, $state, $
     if (!confirm(message)) return;
 
     if (item.type === 'chapter') {
+      // Remove associated batches first
       vm.chapters = vm.chapters.filter(function(chapter) {
         return chapter !== item;
       });
@@ -235,14 +257,17 @@ export default function BudgetDetailController($rootScope, $translate, $state, $
         return batch.chapterId !== item.id;
       });
       
+      // Delete chapter from server
       if (item.id && !item.isTemp) {
         Chapter.deleteById({ id: item.id });
       }
     } else {
+      // Remove single batch
       vm.batches = vm.batches.filter(function(batch) {
         return batch !== item;
       });
       
+      // Delete batch from server
       if (item.id && !item.isTemp) {
         Batch.deleteById({ id: item.id });
       }
@@ -252,15 +277,21 @@ export default function BudgetDetailController($rootScope, $translate, $state, $
     updateCalculations();
   }
 
+  // Generate unique temporary IDs for new items
   function generateTemporaryIds(prefix = 'temp') {
   return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
   }
 
+  // Calculate all costs and sales based on business rules
   function updateCalculations() {
+    // Calculate batch-level values
     vm.batches.forEach(function(batch) {
+      // Unitary cost = material cost + labour cost
       batch.unitaryCost = (parseFloat(batch.materialCost) || 0) + (parseFloat(batch.labourCost) || 0);
+      // Total cost = unitary cost * amount
       batch.totalCost = batch.unitaryCost * (parseFloat(batch.amount) || 0);
       
+      // Apply chapter coefficients to calculate sale prices
       const chapter = findChapterForBatch(batch);
       if (chapter) {
         const materialSale = (parseFloat(batch.materialCost) || 0) * (parseFloat(chapter.materialSaleCoefficient) || 1);
@@ -270,6 +301,7 @@ export default function BudgetDetailController($rootScope, $translate, $state, $
       }
     });
 
+    // Calculate chapter-level totals (sum of batches)
     vm.chapters.forEach(function(chapter) {
       const chapterBatches = getBatchesForChapter(chapter);
       chapter.totalCost = chapterBatches.reduce(function(sum, batch) {
@@ -288,13 +320,16 @@ export default function BudgetDetailController($rootScope, $translate, $state, $
     }, 0);
   }
 
+  // Build flattened array for table display (chapters followed by their batches)
   function buildDisplayItems() {
     vm.displayItems = [];
     
+    // Sort chapters by rank
     const sortedChapters = vm.chapters.slice().sort(function(a, b) {
       return (a.rank || 0) - (b.rank || 0);
     });
     
+    // Add each chapter followed by its sorted batches
     sortedChapters.forEach(function(chapter) {
       chapter.type = 'chapter';
       vm.displayItems.push(chapter);
@@ -310,31 +345,23 @@ export default function BudgetDetailController($rootScope, $translate, $state, $
     });
   }
 
+  // Get all batches belonging to a specific chapter
   function getBatchesForChapter(chapter) {
     return vm.batches.filter(function(batch) {
       return batch.chapterId === chapter.id;
     });
   }
 
+  // Find the chapter that owns a specific batch
   function findChapterForBatch(batch) {
     return vm.chapters.find(function(chapter) {
       return chapter.id === batch.chapterId;
     });
   }
 
+  // Remove thumbnail from budget
   function removeThumbnail() {
     vm.budget.thumbnail = '';
-  }
-
-  function onThumbnailSelect(file) {
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        vm.budget.thumbnail = e.target.result;
-        $rootScope.$apply();
-      };
-      reader.readAsDataURL(file);
-    }
   }
 }
 
